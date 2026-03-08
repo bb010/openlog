@@ -1,0 +1,273 @@
+{
+  "id": "openlog",
+  "title": "Openlog",
+  "description": "",
+  "createdAt": "2026-03-04T17:34:29.895Z",
+  "updatedAt": "2026-03-04T17:37:01.986Z",
+  "nodes": [
+    {
+      "id": "node-1772645683795",
+      "type": "feature",
+      "position": {
+        "x": 50,
+        "y": 50
+      },
+      "data": {
+        "featureId": "node-1772645683795",
+        "title": "sqllite",
+        "description": ""
+      },
+      "measured": {
+        "width": 228,
+        "height": 82
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "node-1772645688027",
+      "type": "feature",
+      "position": {
+        "x": 370,
+        "y": 50
+      },
+      "data": {
+        "featureId": "node-1772645688027",
+        "title": "project",
+        "description": ""
+      },
+      "measured": {
+        "width": 228,
+        "height": 82
+      }
+    },
+    {
+      "id": "node-1772645691070",
+      "type": "feature",
+      "position": {
+        "x": 690,
+        "y": 50
+      },
+      "data": {
+        "featureId": "node-1772645691070",
+        "title": "entries",
+        "description": ""
+      },
+      "measured": {
+        "width": 228,
+        "height": 82
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "node-1772645694646",
+      "type": "feature",
+      "position": {
+        "x": 50,
+        "y": 270
+      },
+      "data": {
+        "featureId": "node-1772645694646",
+        "title": "path",
+        "description": ""
+      },
+      "measured": {
+        "width": 228,
+        "height": 82
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "node-1772645697894",
+      "type": "feature",
+      "position": {
+        "x": 370,
+        "y": 270
+      },
+      "data": {
+        "featureId": "node-1772645697894",
+        "title": "name",
+        "description": ""
+      },
+      "measured": {
+        "width": 228,
+        "height": 82
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "node-1772645706561",
+      "type": "feature",
+      "position": {
+        "x": 690,
+        "y": 270
+      },
+      "data": {
+        "featureId": "node-1772645706561",
+        "title": "description (optional)",
+        "description": ""
+      },
+      "measured": {
+        "width": 228,
+        "height": 82
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "node-1772645717013",
+      "type": "feature",
+      "position": {
+        "x": 50,
+        "y": 490
+      },
+      "data": {
+        "featureId": "node-1772645717013",
+        "title": "screenshot or image (optional)",
+        "description": ""
+      },
+      "measured": {
+        "width": 243,
+        "height": 82
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "node-1772645722678",
+      "type": "feature",
+      "position": {
+        "x": 370,
+        "y": 490
+      },
+      "data": {
+        "featureId": "node-1772645722678",
+        "title": "logs content",
+        "description": ""
+      },
+      "measured": {
+        "width": 228,
+        "height": 82
+      },
+      "selected": false,
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "animated": true,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "width": 20,
+        "height": 20
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "source": "node-1772645683795",
+      "target": "node-1772645688027",
+      "id": "xy-edge__node-1772645683795-node-1772645688027"
+    },
+    {
+      "animated": true,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "width": 20,
+        "height": 20
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "source": "node-1772645683795",
+      "target": "node-1772645691070",
+      "id": "xy-edge__node-1772645683795-node-1772645691070"
+    },
+    {
+      "animated": true,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "width": 20,
+        "height": 20
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "source": "node-1772645691070",
+      "target": "node-1772645717013",
+      "id": "xy-edge__node-1772645691070-node-1772645717013"
+    },
+    {
+      "animated": true,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "width": 20,
+        "height": 20
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "source": "node-1772645691070",
+      "target": "node-1772645722678",
+      "id": "xy-edge__node-1772645691070-node-1772645722678"
+    },
+    {
+      "animated": true,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "width": 20,
+        "height": 20
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "source": "node-1772645688027",
+      "target": "node-1772645697894",
+      "id": "xy-edge__node-1772645688027-node-1772645697894"
+    },
+    {
+      "animated": true,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "width": 20,
+        "height": 20
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "source": "node-1772645688027",
+      "target": "node-1772645706561",
+      "id": "xy-edge__node-1772645688027-node-1772645706561"
+    },
+    {
+      "animated": true,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "width": 20,
+        "height": 20
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "source": "node-1772645688027",
+      "target": "node-1772645694646",
+      "id": "xy-edge__node-1772645688027-node-1772645694646"
+    },
+    {
+      "animated": true,
+      "markerEnd": {
+        "type": "arrowclosed",
+        "width": 20,
+        "height": 20
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "source": "node-1772645688027",
+      "target": "node-1772645691070",
+      "id": "xy-edge__node-1772645688027-node-1772645691070"
+    }
+  ]
+}
