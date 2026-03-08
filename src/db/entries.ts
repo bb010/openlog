@@ -28,7 +28,7 @@ export function createEntry(input: {
 
 export function getEntryById(id: string): LogEntry | null {
   const db = getDatabase();
-  const row = db.prepare('SELECT * FROM logEntries WHERE id = ?').get(id) as LogEntry | undefined;
+  const row = db.prepare('SELECT * FROM logEntries WHERE id = ?').get(id) as unknown as LogEntry | undefined;
   return row ?? null;
 }
 
@@ -36,7 +36,7 @@ export function getEntryByIdAndProject(id: string, projectId: string): LogEntry 
   const db = getDatabase();
   const row = db.prepare(
     'SELECT * FROM logEntries WHERE id = ? AND projectId = ?'
-  ).get(id, projectId) as LogEntry | undefined;
+  ).get(id, projectId) as unknown as LogEntry | undefined;
   return row ?? null;
 }
 
@@ -79,8 +79,8 @@ export function listEntriesByProject(
   query += ' ORDER BY createdAt DESC LIMIT ? OFFSET ?';
   params.push(limit, offset);
 
-  const items = db.prepare(query).all(...params) as LogEntry[];
-  const row = db.prepare(countQuery).get(...countParams) as { count: number };
+  const items = db.prepare(query).all(...params) as unknown as LogEntry[];
+  const row = db.prepare(countQuery).get(...countParams) as unknown as { count: number };
 
   return { items, total: Number(row.count) };
 }
@@ -102,7 +102,7 @@ export function updateEntry(
   if (keys.length === 0) return existing;
 
   const fields = keys.map((k) => `${k} = ?`).join(', ');
-  const values = keys.map((k) => updates[k as keyof typeof updates]);
+  const values = keys.map((k) => updates[k as keyof typeof updates] ?? null);
 
   db.prepare(`UPDATE logEntries SET ${fields}, updatedAt = ? WHERE id = ?`).run(
     ...values,

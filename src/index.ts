@@ -5,11 +5,12 @@ import { initializeDatabase, setDatabase } from './db/init.js';
 import projectRoutes from './routes/projects.js';
 import entryRoutes from './routes/entries.js';
 import imageRoutes from './routes/images.js';
+import { initializeMcpServer, closeMcpServer } from './mcp/server.js';
 import { logger } from './utils/logger.js';
 
 const app = new Hono();
 
-// Initialize database on startup
+// Initialize database on startup (shared by HTTP API and MCP server)
 const db = initializeDatabase();
 setDatabase(db);
 
@@ -37,12 +38,32 @@ app.notFound((c) => {
   );
 });
 
+// ─── MCP Server ──────────────────────────────────────────────────────────────
+// Always starts alongside the HTTP API. When spawned by an MCP client (e.g.
+// Claude Desktop), stdin/stdout are redirected to the client and the stdio
+// transport handles communication. In normal terminal usage, the MCP server
+// simply idles on stdin without affecting HTTP API operation.
+initializeMcpServer().catch((err: unknown) => {
+  logger.error('Failed to start MCP server', { message: err instanceof Error ? err.message : String(err) });
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  await closeMcpServer();
+  process.exit(0);
+});
+process.on('SIGTERM', async () => {
+  await closeMcpServer();
+  process.exit(0);
+});
+
+// ─── HTTP Server ─────────────────────────────────────────────────────────────
 const port = Number(process.env.PORT) || 3000;
 
-logger.info(`Starting OpenLog server on port ${port}`);
+logger.info(`Starting OpenLog HTTP server on port ${port}`);
 
 serve({ fetch: app.fetch, port }, (info) => {
-  logger.info(`OpenLog is running at http://localhost:${info.port}`);
+  logger.info(`OpenLog HTTP API is running at http://localhost:${info.port}`);
 });
 
 export default app;

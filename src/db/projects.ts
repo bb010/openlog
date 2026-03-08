@@ -31,7 +31,7 @@ export function createProject(input: {
 export function getProjectById(id: string): Project | null {
   const db = getDatabase();
   const stmt = db.prepare('SELECT * FROM projects WHERE id = ?');
-  const row = stmt.get(id) as Project | undefined;
+  const row = stmt.get(id) as unknown as Project | undefined;
   return row ?? null;
 }
 
@@ -43,9 +43,9 @@ export function listProjects(
 
   const items = db.prepare(
     'SELECT * FROM projects ORDER BY createdAt DESC LIMIT ? OFFSET ?'
-  ).all(limit, offset) as Project[];
+  ).all(limit, offset) as unknown as Project[];
 
-  const row = db.prepare('SELECT COUNT(*) as count FROM projects').get() as { count: number };
+  const row = db.prepare('SELECT COUNT(*) as count FROM projects').get() as unknown as { count: number };
 
   return { items, total: Number(row.count) };
 }
@@ -69,7 +69,7 @@ export function updateProject(
 
   const values = Object.keys(updates)
     .filter((k) => updates[k as keyof typeof updates] !== undefined)
-    .map((k) => updates[k as keyof typeof updates]);
+    .map((k) => updates[k as keyof typeof updates] ?? null);
 
   db.prepare(`UPDATE projects SET ${fields}, updatedAt = ? WHERE id = ?`).run(
     ...values,

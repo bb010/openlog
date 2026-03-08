@@ -9,7 +9,7 @@ import { handleError, AppError } from '../middleware/errorHandler.js';
 import { ERROR_CODES } from '../utils/constants.js';
 
 /** Shared zValidator hook — routes Zod errors through our error handler */
-function validationHook(result: { success: boolean; error?: ZodError }, c: any) {
+function validationHook(result: { success: boolean; error?: ZodError }, c: any): Response | void {
   if (!result.success && result.error) {
     return handleError(result.error, c);
   }
