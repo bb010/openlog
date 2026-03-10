@@ -1,5 +1,5 @@
 {
-  "name": "@bb010/openlog",
+  "name": "@codeintheopen/openlog",
   "version": "1.0.1",
   "description": "OpenLog — Structured logging platform with MCP tools for AI agents and a browser dashboard",
   "main": "dist/index.js",
@@ -38,7 +38,7 @@
     "start": "node --experimental-sqlite dist/index.js",
     "lint": "tsc --noEmit",
     "prepack": "npm run build",
-    "prepublishOnly": "npm run lint"
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [
     "openlog",
