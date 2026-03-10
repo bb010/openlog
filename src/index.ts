@@ -1,65 +1,45 @@
+/**
+ * OpenLog — Combined Server Entrypoint
+ * ──────────────────────────────────────
+ * This file is the backward-compatible development entrypoint.
+ * It starts both the HTTP API server and the MCP stdio server together,
+ * matching the original behaviour for `npm run dev` and `npm start`.
+ *
+ * For production/package usage, prefer the dedicated CLI commands:
+ *   openlog serve   → HTTP API + dashboard only
+ *   openlog mcp     → MCP stdio server only (clean stdio, no noise)
+ *   openlog         → same as `openlog serve` (default)
+ */
+
 import { serve } from '@hono/node-server';
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { initializeDatabase, setDatabase } from './db/init.js';
-import projectRoutes from './routes/projects.js';
-import entryRoutes from './routes/entries.js';
-import imageRoutes from './routes/images.js';
+import { bootstrap } from './bootstrap.js';
+import { createApp } from './server/app.js';
 import { initializeMcpServer, closeMcpServer } from './mcp/server.js';
 import { logger } from './utils/logger.js';
 
-const app = new Hono();
+// ─── Bootstrap ───────────────────────────────────────────────────────────────
+bootstrap();
 
-// Initialize database on startup (shared by HTTP API and MCP server)
-const db = initializeDatabase();
-setDatabase(db);
+// ─── HTTP App ─────────────────────────────────────────────────────────────────
+const app = createApp();
 
-// Global middleware
-app.use('*', cors());
-
-// Health check
-app.get('/health', (c) => c.json({ status: 'ok', timestamp: new Date().toISOString() }));
-
-// API routes
-app.route('/api/projects', projectRoutes);
-app.route('/api', entryRoutes);
-app.route('/api', imageRoutes);
-
-// 404 handler
-app.notFound((c) => {
-  return c.json(
-    {
-      success: false,
-      data: null,
-      error: { code: 'NOT_FOUND', message: `Route ${c.req.method} ${c.req.path} not found` },
-      timestamp: new Date().toISOString(),
-    },
-    404
-  );
-});
-
-// ─── MCP Server ──────────────────────────────────────────────────────────────
-// Always starts alongside the HTTP API. When spawned by an MCP client (e.g.
-// Claude Desktop), stdin/stdout are redirected to the client and the stdio
-// transport handles communication. In normal terminal usage, the MCP server
-// simply idles on stdin without affecting HTTP API operation.
+// ─── MCP Server ───────────────────────────────────────────────────────────────
 initializeMcpServer().catch((err: unknown) => {
-  logger.error('Failed to start MCP server', { message: err instanceof Error ? err.message : String(err) });
+  logger.error('Failed to start MCP server', {
+    message: err instanceof Error ? err.message : String(err),
+  });
 });
 
-// Graceful shutdown
-process.on('SIGINT', async () => {
+// ─── Graceful shutdown ────────────────────────────────────────────────────────
+const shutdown = async (): Promise<void> => {
   await closeMcpServer();
   process.exit(0);
-});
-process.on('SIGTERM', async () => {
-  await closeMcpServer();
-  process.exit(0);
-});
+};
+process.on('SIGINT', () => { void shutdown(); });
+process.on('SIGTERM', () => { void shutdown(); });
 
-// ─── HTTP Server ─────────────────────────────────────────────────────────────
-const port = Number(process.env.PORT) || 3000;
-
+// ─── HTTP Server ──────────────────────────────────────────────────────────────
+const port = Number(process.env.PORT ?? '3000');
 logger.info(`Starting OpenLog HTTP server on port ${port}`);
 
 serve({ fetch: app.fetch, port }, (info) => {

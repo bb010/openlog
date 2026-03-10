@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+/**
+ * OpenLog CLI — bin wrapper
+ *
+ * This thin wrapper is the npm package binary entry point.
+ * It re-spawns the actual CLI with --experimental-sqlite so that
+ * the built-in node:sqlite module works correctly, regardless of
+ * how the user invoked the command.
+ *
+ * The spawned child inherits all stdio so:
+ *   - `openlog serve` → interactive terminal output (stdout/stderr)
+ *   - `openlog mcp`   → clean stdio for MCP JSON-RPC (OPENLOG_SILENT is set by CLI)
+ */
+
+import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Resolved path to the compiled CLI entry point
+const cliEntry = join(__dirname, '..', 'dist', 'cli', 'openlog.js');
+
+// Forward all CLI args (skip node + bin/openlog)
+const args = process.argv.slice(2);
+
+const child = spawn(
+  process.execPath,                  // current node binary
+  ['--experimental-sqlite', cliEntry, ...args],
+  {
+    stdio: 'inherit',                // inherit stdin/stdout/stderr from parent
+    env: process.env,
+  }
+);
+
+child.on('error', (err) => {
+  process.stderr.write(`[openlog] Failed to start: ${err.message}\n`);
+  process.exit(1);
+});
+
+child.on('exit', (code, signal) => {
+  if (signal) {
+    process.kill(process.pid, signal);
+  } else {
+    process.exit(code ?? 0);
+  }
+});

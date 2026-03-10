@@ -1,22 +1,66 @@
 {
   "name": "openlog",
   "version": "1.0.0",
-  "description": "OpenLog - A logging and build-sharing platform",
+  "description": "OpenLog — Structured logging platform with MCP tools for AI agents and a browser dashboard",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "bin": {
+    "openlog": "bin/openlog"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./bootstrap": {
+      "import": "./dist/bootstrap.js",
+      "types": "./dist/bootstrap.d.ts"
+    },
+    "./mcp": {
+      "import": "./dist/mcp/server.js",
+      "types": "./dist/mcp/server.d.ts"
+    }
+  },
+  "files": [
+    "bin/",
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "node --experimental-sqlite --import tsx --watch src/index.ts",
-    "build": "tsc",
+    "build:backend": "tsc",
+    "build:frontend": "node scripts/build-frontend.mjs",
+    "copy:frontend": "node scripts/copy-frontend.mjs",
+    "build": "npm run build:backend && npm run build:frontend",
     "start": "node --experimental-sqlite dist/index.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [
+    "openlog",
     "logging",
-    "builds",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "claude",
+    "dashboard",
     "hono",
     "sqlite"
   ],
-  "author": "",
+  "author": "codeintheopen",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeintheopen/openlog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/codeintheopen/openlog/issues"
+  },
+  "homepage": "https://github.com/codeintheopen/openlog",
   "dependencies": {
     "@hono/node-server": "^1.19.11",
     "@hono/zod-validator": "^0.7.6",
