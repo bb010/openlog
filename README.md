@@ -866,4 +866,6 @@ Agent: Setting up logging...
 
 ## License
 
-MIT
+GNU Affero General Public License v3.0 (`AGPL-3.0-only`).
+
+If you modify and run this software as a network service, you must make the modified source available under the same license.
