@@ -10,4 +10,3 @@ export interface ErrorPayload {
   message: string;
   details?: Record<string, any>;
 }
-const y: number = "hello"
